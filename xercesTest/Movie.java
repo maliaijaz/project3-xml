@@ -3,6 +3,10 @@ import java.util.ArrayList;
 public class Movie {
 
 	private int movie_id;
+
+	// Necessary for storing a string version of the movie ID from the XML file
+	private String movieStringId;
+
 	private String movie_title;
 	private int year;
 	private String director;
@@ -73,8 +77,16 @@ public class Movie {
 		return movie_id;
 	}
 
+	public String getStringId() {
+		return movieStringId;
+	}
+
 	public void setId(int id) {
 		this.movie_id = id;
+	}
+
+	public void setStringId(String id){
+		this.movieStringId = id;
 	}
 
 	public String getTitle() {
@@ -121,6 +133,10 @@ public class Movie {
 		StringBuffer sb = new StringBuffer();
 		sb.append("Director Details - ");
 		sb.append("Director Name:" + getDirector());
+		sb.append("\n--List of movies--\n");
+		sb.append("Movie ID: " + getStringId());
+		sb.append("Movie Name: " + getTitle());
+
 
 		return sb.toString();
 	}

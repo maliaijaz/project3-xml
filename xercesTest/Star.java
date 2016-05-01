@@ -8,6 +8,10 @@ public class Star {
 	private String star_photo;
 	private ArrayList<Movie> movies;
 
+	public Star(){
+
+	}
+
 	public Star(int id,String first_name, String last_name, String birthdate, String photo_url){
 		star_id=id;
 		star_first_name=first_name;
@@ -75,6 +79,14 @@ public class Star {
 	}
 	public void setStar_dob(String birthdate) {
 		star_dob = birthdate;
+	}
+
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("\nActor first name: " + getFirst_name());
+		sb.append("\nActor last name: " + getLast_name());
+
+		return sb.toString();
 	}
 
 }
