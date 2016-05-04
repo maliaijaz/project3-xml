@@ -1,4 +1,5 @@
 
+// insert stars sequentially
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,18 +15,24 @@ import org.xml.sax.SAXException;
 
 import org.xml.sax.helpers.DefaultHandler;
 
-public class SAXParserExample extends DefaultHandler{
+public class StarSAXParser extends DefaultHandler{
 
-	List movieGenres;
+	List stars;
+
+	List finalListOfStars;
 
 	private String tempVal;
 
+	List temporaryArray;
+
 	//to maintain context
-	private MovieGenre tempMovieGenre;
+	private Star tempStar;
 
 
-	public SAXParserExample(){
-		movieGenres = new ArrayList();
+	public StarSAXParser(){
+		stars = new ArrayList();
+		finalListOfStars = new ArrayList();
+		temporaryArray = new ArrayList();
 	}
 
 	public void runExample() {
@@ -43,7 +50,7 @@ public class SAXParserExample extends DefaultHandler{
 			SAXParser sp = spf.newSAXParser();
 
 			//parse the file and also register this class for call backs
-			sp.parse("mains243.xml", this);
+			sp.parse("cast.xml", this);
 
 		}catch(SAXException se) {
 			se.printStackTrace();
@@ -60,12 +67,12 @@ public class SAXParserExample extends DefaultHandler{
 	 */
 	private void printData(){
 
-		System.out.println("Number of Movies '" + movieGenres.size() + "'.");
+		System.out.println("Number of Stars '" + stars.size() + "'.");
 
-		Iterator it = movieGenres.iterator();
-		while(it.hasNext()) {
-			System.out.println(it.next().toString());
-		}
+		// Iterator it = stars.iterator();
+		// while(it.hasNext()) {
+		// 	System.out.println(it.next().toString());
+		// }
 	}
 
 
@@ -73,10 +80,9 @@ public class SAXParserExample extends DefaultHandler{
 	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
 		//reset
 		tempVal = "";
-		if(qName.equalsIgnoreCase("film")) {
+		if(qName.equalsIgnoreCase("m")) {
 			//create a new instance of employee
-			tempMovieGenre = new MovieGenre();
-			// tempMovieGenre.setType(attributes.getValue("type"));
+			tempStar = new Star();
 		}
 	}
 
@@ -87,29 +93,30 @@ public class SAXParserExample extends DefaultHandler{
 
 	public void endElement(String uri, String localName, String qName) throws SAXException {
 
-		if(qName.equalsIgnoreCase("film")) {
+		if(qName.equalsIgnoreCase("m")) {
 			//add it to the list
-			movieGenres.add(tempMovieGenre);
-
-		}else if (qName.equalsIgnoreCase("fid")) {
-			tempMovieGenre.setMovieId(tempVal);
+			stars.add(tempStar);
+		}else if (qName.equalsIgnoreCase("f")) {
+			tempStar.setStarId(tempVal);
+			temporaryArray.add(tempVal); // adds the film ID
 		}else if (qName.equalsIgnoreCase("t")) {
-			tempMovieGenre.setMovieTitle(tempVal);
-		}else if (qName.equalsIgnoreCase("year")) {
-			tempMovieGenre.setMovieYear(tempVal); //change movie year to a string later
+			tempStar.addMovieTitle(tempVal);
+			temporaryArray.add(tempVal); // adds movie title
+		}else if (qName.equalsIgnoreCase("a")) {
+			tempStar.setStarFullName(tempVal); // adds star's full name
+			temporaryArray.add(tempVal);
+			// String[] nameArray = tempVal.split("\\s+");
+			// tempStar.setFirstName = nameArray[0];
+			// tempStar.setLastName = nameArray[1];
 		}
-    else if (qName.equalsIgnoreCase("dirn")) {
-			tempMovieGenre.addDirectorToList(tempVal);
-		}
-    else if (qName.equalsIgnoreCase("cat")) {
-			tempMovieGenre.setMovieGenre(tempVal);
-		}
-
+		finalListOfStars.add(tempStar);
 	}
 
 	public static void main(String[] args){
-		SAXParserExample spe = new SAXParserExample();
+		System.out.println("\nStarting SAX Parser\n");
+		StarSAXParser spe = new StarSAXParser();
 		spe.runExample();
+		System.out.println("Here's teh temporary array: " + spe.temporaryArray);
 	}
 
 }
